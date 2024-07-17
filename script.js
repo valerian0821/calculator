@@ -26,9 +26,29 @@ function operate(operator, firstNum, secondNum) {
     }
 }
 
+function intializeCalc() {
+    numbers.forEach(button => {
+        button.addEventListener("click", (event) => {
+            // console.log(event.target.innerText)
+            displayNumber(event.target.innerText);
+        })
+    });
+}
+
+function displayNumber(newNum) {
+    if (displayValue === undefined) {
+        displayValue = newNum;
+        display.textContent = `${newNum}`;    
+    } else {
+        display.textContent = `${displayValue}` + `${newNum}`;
+        displayValue = Number(display.textContent);
+    }
+}
 
 const display = document.querySelector("#display-box");
 const numbers = document.querySelectorAll(".number");
 let firstNum;
 let secondNum;
 let operator;
+let displayValue;
+intializeCalc();
