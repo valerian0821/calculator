@@ -21,7 +21,7 @@ function operate(operator, first, second) {
         return subtract(first, second);
     } else if (operator === "*") {
         return multiply(first, second);
-    } else {
+    } else if (operator === "/") {
         return divide(first, second);
     }
 }
@@ -30,7 +30,8 @@ function intializeCalc() {
     numbers.forEach(button => {
         button.addEventListener("click", (event) => {
             // console.log(event.target.innerText)
-            if (accumNum !== undefined) {
+            isOperatorLast = false;
+            if (isOperatorLast === true) {
                 clearDisplay();
             }
             displayNumber(event.target.innerText);
@@ -47,26 +48,60 @@ function activateOperators() {
 }
 
 function calculate(operator) {
-    if (accumNum === undefined && currentNum === undefined) {
-        accumNum = displayValue;
-        console.log(accumNum);
-    } else if (accumNum !== undefined && currentNum === undefined) {
-        currentNum = displayValue;
-        console.log(currentNum);
-        let total = operate(operator, accumNum, currentNum);
-        console.log(total);
-    } 
+    if (isOperatorLast === false) {
+        if (accumNum === undefined && operator !== "=") {
+            currentNum = displayValue;
+            accumNum = currentNum;
+            console.log(accumNum);
+            currentNum = undefined;
+            lastOperator = operator;
+            isOperatorLast = true;
+            displayValue = undefined;
+        } else if (accumNum !== undefined && operator !== "=") {
+            currentNum = displayValue;
+            console.log(currentNum);
+            accumNum = operate(lastOperator, accumNum, currentNum);
+            clearDisplay();
+            displayNumber(accumNum);
+            console.log(accumNum);
+            currentNum = undefined;
+            lastOperator = operator;
+            isOperatorLast = true;
+            displayValue = undefined;
+        } else if (accumNum !== undefined && operator === "=") {
+            currentNum = displayValue;
+            console.log(currentNum);
+            accumNum = operate(lastOperator, accumNum, currentNum);
+            clearDisplay();
+            displayNumber(accumNum);
+            console.log(accumNum);
+            currentNum = undefined;
+            lastOperator = operator;
+            isOperatorLast = true;
+            displayValue = undefined;
+            accumNum = undefined;
+        } else {
+            currentNum = displayValue;
+            accumNum = currentNum;
+            console.log(accumNum);
+            currentNum = undefined;
+            lastOperator = operator;
+            isOperatorLast = true;
+            displayValue = undefined;
+            accumNum = undefined;
+        }
+    }
+    //MUST SIMPLIFY LATER 
 }
 
 function displayNumber(newNum) {
     if (displayValue === undefined) {
         displayValue = newNum;
-        display.textContent = `${newNum}`;
-        displayValue = Number(display.textContent);    
+        display.textContent = `${newNum}`;   
     } else {
         display.textContent = `${displayValue}` + `${newNum}`;
-        displayValue = Number(display.textContent);
     }
+    displayValue = Number(display.textContent);
 }
 
 function clearDisplay() {
@@ -80,5 +115,7 @@ let accumNum;
 let currentNum;
 let operator;
 let displayValue;
+let isOperatorLast = false;
+let lastOperator;
 intializeCalc();
 activateOperators();
