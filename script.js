@@ -72,6 +72,7 @@ function calculate(operator) {
             currentNum = displayValue;
             console.log(currentNum);
             accumNum = operate(lastOperator, accumNum, currentNum);
+            total = accumNum;
             clearDisplay();
             displayNumber(accumNum);
             console.log(accumNum);
@@ -83,6 +84,7 @@ function calculate(operator) {
         } else {
             currentNum = displayValue;
             accumNum = currentNum;
+            total = accumNum;
             console.log(accumNum);
             currentNum = undefined;
             lastOperator = operator;
@@ -92,6 +94,29 @@ function calculate(operator) {
         }
     }
     //MUST SIMPLIFY LATER 
+    else {
+        if (lastOperator === "=") {
+            if (operator !== "=") {
+                accumNum = total;
+                lastOperator = operator;
+            } 
+        }
+        else {
+            if (operator === "=") {
+                originalNum = currentNum;
+                currentNum = accumNum;
+                accumNum = operate(lastOperator, accumNum, currentNum);
+                total = accumNum;
+                clearDisplay();
+                displayNumber(accumNum);
+                lastOperator = operator;
+                displayValue = undefined;
+            }
+            else {
+                lastOperator = operator;
+            }
+        }
+    }
 }
 
 function displayNumber(newNum) {
@@ -117,5 +142,6 @@ let operator;
 let displayValue;
 let isOperatorLast = false;
 let lastOperator;
+let total;
 intializeCalc();
 activateOperators();
