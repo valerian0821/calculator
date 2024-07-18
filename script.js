@@ -26,10 +26,21 @@ function operate(operator, first, second) {
     }
 }
 
+function clearCalc() {
+    clearDisplay();
+    display.textContent = "0";
+    accumNum = undefined;
+    currentNum = undefined;
+    operator = undefined;
+    displayValue = undefined;
+    isOperatorLast = false;
+    lastOperator = undefined;
+    total = undefined;   
+}
+
 function intializeCalc() {
     numbers.forEach(button => {
         button.addEventListener("click", (event) => {
-            // console.log(event.target.innerText)
             isOperatorLast = false;
             if (isOperatorLast === true) {
                 clearDisplay();
@@ -37,6 +48,7 @@ function intializeCalc() {
             displayNumber(event.target.innerText);
         })
     });
+    clear.addEventListener("click", clearCalc);
 }
 
 function activateOperators() {
@@ -136,6 +148,7 @@ function clearDisplay() {
 const display = document.querySelector("#display-box");
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operators");
+const clear = document.querySelector("#clear");
 let accumNum;
 let currentNum;
 let operator;
